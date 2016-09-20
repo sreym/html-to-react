@@ -201,6 +201,16 @@ describe('Html2React', function() {
 
             assert.equal(reactHtml, htmlExpected);
         });
+
+        it('should not insert whitespace text nodes into tables', function () {
+            var htmlInput = '<table> <tbody> <tr>\n<td>x</td></tr> </tbody> </table>';
+            var htmlExpected = '<table><tbody><tr><td>x</td></tr></tbody></table>';
+
+            var reactComponent = parser.parse(htmlInput);
+            var reactHtml = ReactDOMServer.renderToStaticMarkup(reactComponent);
+
+            assert.equal(reactHtml, htmlExpected);
+        });
     });
 
     describe('parse invalid HTML', function() {
