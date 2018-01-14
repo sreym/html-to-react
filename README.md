@@ -1,4 +1,6 @@
 # html-to-react
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/aknuds1/html-to-react.svg)](https://greenkeeper.io/)
 [![Build Status](https://travis-ci.org/aknuds1/html-to-react.svg?branch=master)](https://travis-ci.org/aknuds1/html-to-react)
 [![npm version](https://badge.fury.io/js/html-to-react.svg)](http://badge.fury.io/js/html-to-react)
 [![Dependency Status](https://david-dm.org/aknuds1/html-to-react.svg)](https://david-dm.org/aknuds1/html-to-react)
@@ -43,16 +45,16 @@ React tree with one single parent.
 
 ### Simple
 
-The following example parses each node and its attributes and returns a tree of React components.
+The following example parses each node and its attributes and returns a tree of React elements.
 
 ```javascript
-var React = require('react');
+var ReactDOMServer = require('react-dom/server');
 var HtmlToReactParser = require('html-to-react').Parser;
 
 var htmlInput = '<div><h1>Title</h1><p>A paragraph</p></div>';
 var htmlToReactParser = new HtmlToReactParser();
-var reactComponent = htmlToReactParser.parse(htmlInput);
-var reactHtml = React.renderToStaticMarkup(reactComponent);
+var reactElement = htmlToReactParser.parse(htmlInput);
+var reactHtml = ReactDOMServer.renderToStaticMarkup(reactElement);
 
 assert.equal(reactHtml, htmlInput); // true
 ```
@@ -63,13 +65,14 @@ If certain DOM nodes require specific processing, for example if you want to cap
 `<h1>` tag, the following example demonstrates this:
 
 ```javascript
-var React = require('react');
+var ReactDOMServer = require('react-dom/server');
+var HtmlToReact = require('html-to-react');
 var HtmlToReactParser = require('html-to-react').Parser;
 
 var htmlInput = '<div><h1>Title</h1><p>Paragraph</p><h1>Another title</h1></div>';
 var htmlExpected = '<div><h1>TITLE</h1><p>Paragraph</p><h1>ANOTHER TITLE</h1></div>';
 
-var isValidNode = function() {
+var isValidNode = function () {
     return true;
 };
 
@@ -78,15 +81,15 @@ var processNodeDefinitions = new HtmlToReact.ProcessNodeDefinitions(React);
 var processingInstructions = [
     {
         // Custom <h1> processing
-        shouldProcessNode: function(node) {
+        shouldProcessNode: function (node) {
             return node.parent && node.parent.name && node.parent.name === 'h1';
         },
-        processNode: function(node, children) {
+        processNode: function (node, children) {
             return node.data.toUpperCase();
         }
     }, {
         // Anything else
-        shouldProcessNode: function(node) {
+        shouldProcessNode: function (node) {
             return true;
         },
         processNode: processNodeDefinitions.processDefaultNode
@@ -94,7 +97,7 @@ var processingInstructions = [
 var htmlToReactParser = new HtmlToReactParser();
 var reactComponent = htmlToReactParser.parseWithInstructions(htmlInput, isValidNode,
   processingInstructions);
-var reactHtml = React.renderToStaticMarkup(reactComponent);
+var reactHtml = ReactDOMServer.renderToStaticMarkup(reactComponent);
 assert.equal(reactHtml, htmlExpected);
 ```
 
@@ -142,15 +145,18 @@ In your instructions object, you must specify `replaceChildren: true`.
 
 ```javascript
 var React = require('react');
+var HtmlToReact = require('html-to-react');
 var HtmlToReactParser = require('html-to-react').Parser;
 
 var htmlToReactParser = new HtmlToReactParser();
 var htmlInput = '<div><div data-test="foo"><p>Text</p><p>Text</p></div></div>';
 var htmlExpected = '<div><div data-test="foo"><h1>Heading</h1></div></div>';
 
-var isValidNode = function() {
+var isValidNode = function () {
     return true;
 };
+
+var processNodeDefinitions = new HtmlToReact.ProcessNodeDefinitions(React);
 
 // Order matters. Instructions are processed in
 // the order they're defined

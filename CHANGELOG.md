@@ -1,12 +1,134 @@
 # Change Log
 
+## [v1.3.3](https://github.com/aknuds1/html-to-react/tree/v1.3.3)
+
+- Handle free-standing text nodes in HTML
+
+[Full Changelog](https://github.com/aknuds1/html-to-react/compare/v1.3.2...v1.3.3)
+
+## [v1.3.2](https://github.com/aknuds1/html-to-react/tree/v1.3.2)
+
+- Handle directives in HTML
+
+[Full Changelog](https://github.com/aknuds1/html-to-react/compare/v1.3.1...v1.3.2)
+
+## [v1.3.1](https://github.com/aknuds1/html-to-react/tree/v1.3.1)
+
+- Handle invalid inline styles
+
+[Full Changelog](https://github.com/aknuds1/html-to-react/compare/v1.3.0...v1.3.1)
+
+**Merged pull requests:**
+
+- Handle invalid inline styles [\#52](https://github.com/aknuds1/html-to-react/pull/52) ([nickpalmer](https://github.com/nickpalmer))
+
+## [v1.3.0](https://github.com/aknuds1/html-to-react/tree/v1.3.0)
+
+- Upgrade to React 16
+
+[Full Changelog](https://github.com/aknuds1/html-to-react/compare/v1.2.12...v1.3.0)
+
+## [v1.2.12](https://github.com/aknuds1/html-to-react/tree/v1.2.12)
+
+- Trim inline style props values
+
+[Full Changelog](https://github.com/aknuds1/html-to-react/compare/v1.2.11...v1.2.12)
+
+**Merged pull requests:**
+
+- Trim inline style props values [\#47](https://github.com/aknuds1/html-to-react/pull/47) ([gycianka](https://github.com/gycianka))
+
+## [v1.2.11](https://github.com/aknuds1/html-to-react/tree/v1.2.11)
+
+- Handle base64 inlined images
+
+[Full Changelog](https://github.com/aknuds1/html-to-react/compare/v1.2.10...v1.2.11)
+
+**Merged pull requests:**
+
+- Fix for base64 inlined images [\#33](https://github.com/aknuds1/html-to-react/pull/33) ([aleemb](https://github.com/aleemb))
+
+## [v1.2.10](https://github.com/aknuds1/html-to-react/tree/v1.2.10)
+
+- Handle background-image styles
+
+[Full Changelog](https://github.com/aknuds1/html-to-react/compare/v1.2.9...v1.2.10)
+
+**Merged pull requests:**
+
+- Handle background-image styles [\#31](https://github.com/aknuds1/html-to-react/pull/31) ([brett-nuske-alliancesoftware](https://github.com/brett-nuske-alliancesoftware))
+
+## [v1.2.9](https://github.com/aknuds1/html-to-react/tree/v1.2.9)
+
+- Handle `for` attribute
+
+[Full Changelog](https://github.com/aknuds1/html-to-react/compare/v1.2.8...v1.2.9)
+
+## [v1.2.8](https://github.com/aknuds1/html-to-react/tree/v1.2.8)
+
+- Handle xmlns:xlink
+
+[Full Changelog](https://github.com/aknuds1/html-to-react/compare/v1.2.7...v1.2.8)
+
+**Merged pull requests:**
+
+- Converting for to htmlFor [\#30](https://github.com/aknuds1/html-to-react/pull/30) ([nathanfriemel](https://github.com/nathanfriemel))
+
+## [v1.2.7](https://github.com/aknuds1/html-to-react/tree/v1.2.7)
+
+- Depend directly on domhandler, for compatibility with older Node.js
+
+[Full Changelog](https://github.com/aknuds1/html-to-react/compare/v1.2.6...v1.2.7)
+
+## [v1.2.6](https://github.com/aknuds1/html-to-react/tree/v1.2.6)
+
+- Make library smaller
+
+[Full Changelog](https://github.com/aknuds1/html-to-react/compare/v1.2.5...v1.2.6)
+
+## [v1.2.5](https://github.com/aknuds1/html-to-react/tree/v1.2.5)
+
+[Full Changelog](https://github.com/aknuds1/html-to-react/compare/v1.2.4...v1.2.5)
+
+**Merged pull requests:**
+
+- Test of inline style with characters entities. [\#21](https://github.com/aknuds1/html-to-react/pull/21) ([Gycianka](https://github.com/Gycianka))
+
+## [v1.2.4](https://github.com/aknuds1/html-to-react/tree/v1.2.4)
+
+[Full Changelog](https://github.com/aknuds1/html-to-react/compare/v1.2.3...v1.2.4)
+
+**Merged pull requests:**
+
+- parsing multiple root elements [\#17](https://github.com/aknuds1/html-to-react/pull/17) ([oroce](https://github.com/oroce))
+
+## [v1.2.3](https://github.com/aknuds1/html-to-react/tree/v1.2.3)
+
+[Full Changelog](https://github.com/aknuds1/html-to-react/compare/v1.2.2...v1.2.3)
+
+**Merged pull requests:**
+
+- Occurrence of ampersand in attributes are decoded to `&` to avoid ano… [\#15](https://github.com/aknuds1/html-to-react/pull/15) ([gerhardsletten](https://github.com/gerhardsletten))
+
+## [v1.2.2](https://github.com/aknuds1/html-to-react/tree/v1.2.2)
+
+[Full Changelog](https://github.com/aknuds1/html-to-react/compare/v1.2.1...v1.2.2)
+
+**Merged pull requests:**
+
+- handle xmlns attributes (e.g. xlink:href) [\#9](https://github.com/aknuds1/html-to-react/pull/9) ([gfx](https://github.com/gfx))
+
+## [v1.2.1](https://github.com/aknuds1/html-to-react/tree/v1.2.1)
+
+[Full Changelog](https://github.com/aknuds1/html-to-react/compare/v1.2.0...v1.2.1)
+
 ## [v1.2.0](https://github.com/aknuds1/html-to-react/tree/v1.2.0)
 
 [Full Changelog](https://github.com/aknuds1/html-to-react/compare/v1.1.2...v1.2.0)
 
 **Merged pull requests:**
 
-- Replace element children [\#2]https://github.com/aknuds1/html-to-react/pull/3) ([hirefrederick](HireFrederick))
+- Replace element children [\#2](https://github.com/aknuds1/html-to-react/pull/3) ([hirefrederick](https://github.com/hirefrederick))
 
 ## [v1.1.2](https://github.com/aknuds1/html-to-react/tree/v1.1.2)
 

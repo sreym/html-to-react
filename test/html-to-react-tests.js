@@ -3,6 +3,7 @@ var assert = require('assert');
 var React = require('react');
 var ReactDOMServer = require('react-dom/server');
 var R = require('ramda');
+var escapeStringRegexp = require('escape-string-regexp');
 
 var Parser = require('..').Parser;
 var ProcessNodeDefinitions = require('..').ProcessNodeDefinitions;
@@ -30,7 +31,20 @@ describe('Html2React', function () {
     });
 
     it('should return a valid HTML string with inline styles', function () {
-      var htmlInput = '<div style="background-color: red;color: white;"></div>';
+      var htmlInput = '<div style="background-image:url(' +
+        '&quot;http://lorempixel.com/400/200/&quot;);background-color:red;color:white;' +
+        'font-family:&quot;Open Sans&quot;"></div>';
+
+      var reactComponent = parser.parse(htmlInput);
+      var reactHtml = ReactDOMServer.renderToStaticMarkup(reactComponent);
+
+      assert.equal(reactHtml, htmlInput);
+    });
+
+    it('should return a valid HTML string with inline image in style', function () {
+      var htmlInput = '<div style="background:url(' +
+        'data:image/png;base64,iVBORw0KGgoAAA);color:white;' +
+        'font-family:&quot;Open Sans&quot;"></div>';
 
       var reactComponent = parser.parse(htmlInput);
       var reactHtml = ReactDOMServer.renderToStaticMarkup(reactComponent);
@@ -68,6 +82,15 @@ describe('Html2React', function () {
 
     it('should return a valid HTML string with a class attribute', function () {
       var htmlInput = '<div class="class-one"></div>';
+
+      var reactComponent = parser.parse(htmlInput);
+      var reactHtml = ReactDOMServer.renderToStaticMarkup(reactComponent);
+
+      assert.equal(reactHtml, htmlInput);
+    });
+
+    it('should return a valid HTML string with a for attribute', function () {
+      var htmlInput = '<label for="input"></label>';
 
       var reactComponent = parser.parse(htmlInput);
       var reactHtml = ReactDOMServer.renderToStaticMarkup(reactComponent);
@@ -219,29 +242,58 @@ describe('Html2React', function () {
 
       assert.equal(reactHtml, htmlExpected);
     });
+
+    it('should decode attribute values to avoid React re-encoding them', function () {
+      var htmlInput = '<p><a href="http://domain.com/search?query=1&amp;lang=en">A link</a></p>';
+
+      var reactComponent = parser.parse(htmlInput);
+      var reactHtml = ReactDOMServer.renderToStaticMarkup(reactComponent);
+
+      assert.equal(reactHtml, htmlInput);
+    });
+
+    it('should handle spaces in inline styles', function () {
+      var htmlInput = '<p style="text-align: center"></p>';
+
+      var reactComponent = parser.parse(htmlInput);
+
+      assert.equal(reactComponent.props.style.textAlign, 'center');
+    });
+
+    it('should handle doctype directives', function () {
+      var htmlInput = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" ' +
+      '"http://www.w3.org/TR/REC-html40/loose.dtd"><html><body><div></div></body></html>';
+
+      var reactComponent = parser.parse(htmlInput);
+      var reactHtml = ReactDOMServer.renderToStaticMarkup(reactComponent);
+
+      assert.equal(reactHtml, '<html><body><div></div></body></html>');
+    });
+
+    it('should handle free text nodes', function () {
+      var htmlInput = 'text<div></div>text';
+
+      var reactComponent = parser.parse(htmlInput);
+      var reactHtml = ReactDOMServer.renderToStaticMarkup(reactComponent);
+
+      assert.equal(reactHtml, 'text<div></div>text');
+    });
   });
 
   describe('parse invalid HTML', function () {
-    it('should throw an error when trying parsing multiple root elements', function () {
-      var htmlInput = '<div></div><div></div>';
-
-      assert.throws(function () {
-        parser.parse(htmlInput);
-      }, Error);
-    });
-
-    it('should throw an error with a specific message when parsing multiple root elements',
-    function () {
-      var htmlInput = '<div></div><div></div><div></div>';
-
-      assert.throws(function () {
-        parser.parse(htmlInput);
-      }, /contains 3 root elements/);
-    });
-
     it('should fix missing closing tags', function () {
       var htmlInput = '<div><p></div>';
       var htmlExpected = '<div><p></p></div>';
+
+      var reactComponent = parser.parse(htmlInput);
+      var reactHtml = ReactDOMServer.renderToStaticMarkup(reactComponent);
+
+      assert.equal(reactHtml, htmlExpected);
+    });
+
+    it('should handle invalid style tag', function () {
+      var htmlInput = '<div style="color:black;href="></div>';
+      var htmlExpected = '<div style="color:black"></div>';
 
       var reactComponent = parser.parse(htmlInput);
       var reactHtml = ReactDOMServer.renderToStaticMarkup(reactComponent);
@@ -398,6 +450,34 @@ describe('Html2React', function () {
 
         assert.equal(reactComponent.props.children.length, 5);
       });
+    });
+  });
+
+  describe('parse SVG', function () {
+    it('should have correct attributes', function () {
+      var input2RegExp = {
+        '<svg><image xlink:href="http://i.imgur.com/w7GCRPb.png"/></svg>':
+          /<svg><image xlink:href="http:\/\/i\.imgur\.com\/w7GCRPb\.png"/,
+        '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"></svg>':
+          // eslint-disable-next-line max-len
+          /<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg" xmlns:xlink="http:\/\/www\.w3\.org\/1999\/xlink"><\/svg>/,
+      };
+      R.forEach(function (inputAndRegExp) {
+        var input = inputAndRegExp[0], regExp = inputAndRegExp[1];
+        var reactComponent = parser.parse(input);
+        var reactHtml = ReactDOMServer.renderToStaticMarkup(reactComponent);
+
+        assert(regExp.test(reactHtml), reactHtml + ' has expected attributes');
+      }, R.toPairs(input2RegExp));
+    });
+  });
+
+  describe('parsing multiple elements', function () {
+    it('should result in a list of React elements', function () {
+      var htmlInput = '<div></div><div></div>';
+      var elements = parser.parse(htmlInput);
+      var output = elements.map(ReactDOMServer.renderToStaticMarkup).join('');
+      assert.equal(htmlInput, output);
     });
   });
 });
